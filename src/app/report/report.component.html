@@ -1,0 +1,73 @@
+<div
+  class="w-full p-4 text-center bg-white border rounded-lg shadow-md sm:p-8 mb-3"
+>
+  <div class="grid grid-cols-6 gap-3">
+    <div class="col-start-0 col-span-1 self-center">
+      <mat-form-field>
+        <mat-label>Hisse Seçiniz</mat-label>
+        <mat-select [formControl]="stock">
+          <mat-option *ngFor="let stock of stockList" [value]="stock">{{
+            stock
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!-- ... -->
+    <div class="col-start-2 col-span-1 self-center">
+      <mat-form-field appearance="fill">
+        <mat-label>Tarih Seçiniz</mat-label>
+        <mat-date-range-input [formGroup]="daterRange" [rangePicker]="picker">
+          <input
+            matStartDate
+            formControlName="start"
+            placeholder="Start date"
+          />
+          <input matEndDate formControlName="end" placeholder="End date" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+
+        <mat-error
+          *ngIf="daterRange.controls.start.hasError('matStartDateInvalid')"
+          >Invalid start date</mat-error
+        >
+        <mat-error *ngIf="daterRange.controls.end.hasError('matEndDateInvalid')"
+          >Invalid end date</mat-error
+        >
+      </mat-form-field>
+    </div>
+    <div class="col-end-7 col-span-1 self-center">
+      <button mat-raised-button color="primary" (click)="getSeries()">
+        Göster
+      </button>
+    </div>
+  </div>
+</div>
+
+<div
+  class="w-full p-4 text-center bg-white border rounded-lg shadow-md sm:p-8 mb-3"
+>
+  <canvas id="myChart">{{ chart }}</canvas>
+</div>
+
+<div
+  *ngIf="valuesOfSeries"
+  class="w-full p-4 text-center bg-white border rounded-lg shadow-md sm:p-8"
+>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <ng-container *ngFor="let item of valuesOfSeries">
+          <th scope="col">{{ item[0] }}</th>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">{{ stock.value }}</th>
+        <td *ngFor="let item of valuesOfSeries">{{ item[1]["4. close"] }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
